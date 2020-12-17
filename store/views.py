@@ -1,3 +1,7 @@
+import json
+from builtins import print
+from json import loads
+
 from django.conf import settings
 from django.contrib.auth import (authenticate, login, logout,
                                  update_session_auth_hash)
@@ -5,14 +9,15 @@ from django.contrib.auth.forms import (AuthenticationForm, PasswordChangeForm,
                                        UserCreationForm)
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.views import generic
 from django.views.generic import View
 from django.views.generic.edit import CreateView
+
+from .forms import EditUserProfileForm, UpdateUserForm, UserRegisterForm
 from .models import *
-from .forms import UpdateUserForm, UserRegisterForm, EditUserProfileForm
 
 
 class SignUpView(SuccessMessageMixin, CreateView):
@@ -135,3 +140,12 @@ def profile(request):
     else:
         return render('store/store.html')
 
+def updateItem(request):
+    data = json.loads(request.body)
+    productId = data['productId']
+    action = data['action']
+
+    print('action:', action)
+    print('productId', productId)
+
+    return JsonResponse('Item was added', safe=False)
