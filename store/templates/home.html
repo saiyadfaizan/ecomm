@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{%block content%}
+<div class="container">
+    {%if user.is_authenticated%}
+      Welcome 
+      {{user.first_name}},
+      <br/>
+      <br/>
+      Username : {{user.username}}
+      <br/>
+      Name: {{user.first_name}} {{user.last_name}} 
+      <br/>
+      Email: {{user.email}}
+      <br/>
+      <button><a href="{%url 'update_user'%}">Update details</a></button>
+      <button><a href="{%url 'change_password'%}">Change Password</a></button>
+      <button><a href="{%url 'logout'%}">Logout</a></button>
+    {% else %}
+      <p>Already have an account? Then please <a href="{%url 'login' %}">sign in</a></p>
+      <p>Not have an account then please <a href="{%url 'signup'%}">sign up</a>
+
+    {%endif%}
+  </div>
+{% endblock %}
+
