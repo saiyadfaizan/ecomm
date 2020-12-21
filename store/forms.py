@@ -1,23 +1,31 @@
 from django import forms
+from django.contrib.auth.forms import (AuthenticationForm, PasswordChangeForm,
+                                       UserChangeForm, UserCreationForm)
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm, PasswordChangeForm
+from django.db.models.fields import IntegerField
+from django.forms.models import ModelForm
+from .models import *
+
 
 class UserRegisterForm(UserCreationForm):
   first_name = forms.CharField(max_length=30)
   last_name = forms.CharField(max_length=30)
-  email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
+  email = forms.EmailField(
+      max_length=254, help_text='Required. Inform a valid email address.')
 
   class Meta:
     model = User
-    fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2')
-
+    fields = ('username', 'first_name', 'last_name',
+              'email', 'password1', 'password2')
 
 
 class UpdateUserForm(UserChangeForm):
   password = None
+
   class Meta:
     model = User
     fields = ['username', 'first_name', 'last_name', 'email']
+
 
 class EditUserProfileForm(UserChangeForm):
     password = None
@@ -27,8 +35,20 @@ class EditUserProfileForm(UserChangeForm):
 
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 
+        fields = ['username', 'first_name', 'last_name', 'email',
                   'date_joined', 'last_login']
+
+
+class CheckoutForm(forms.ModelForm):
+    address = forms.CharField(max_length=200)
+    city = forms.CharField(max_length=100)
+    state = forms.CharField(max_length=100)
+    pincode = forms.IntegerField()
+
+    class Meta:
+        model = ShippingAddress
+        fields = ['address', 'city', 'state', 'pincode']
+
 
 '''
 class UpdatePasswordForm(PasswordChangeForm):

@@ -1,7 +1,11 @@
-from django.urls import path
-from . import views
-from .views import SignUpView, LoginView, LogoutView, UpdateUserView, UpdatePasswordView
+from os import name, path
+
 from django.contrib.auth import views as auth_views
+from django.urls import path
+
+from . import views
+from .views import (LoginView, LogoutView, SignUpView, UpdatePasswordView,
+                    UpdateUserView)
 
 urlpatterns = [
     path('store/', views.store, name="store"),

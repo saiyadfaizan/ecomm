@@ -1,5 +1,4 @@
 import json
-from builtins import print
 from json import loads
 
 from django.conf import settings
@@ -13,10 +12,12 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.views import generic
-from django.views.generic import View
+from django.views.generic import FormView, View
 from django.views.generic.edit import CreateView
 
-from .forms import EditUserProfileForm, UpdateUserForm, UserRegisterForm
+
+from .forms import (EditUserProfileForm, UpdateUserForm,
+                    UserRegisterForm)
 from .models import *
 
 
@@ -56,77 +57,102 @@ class LoginView(generic.View):
 
 
 class LogoutView(generic.RedirectView):
-    
+
     def get_redirect_url(self, *args, **kwargs):
-            logout(self.request)
-            return reverse('login')
-            
+        logout(self.request)
+        return reverse('login')
+
+
 class UpdateUserView(LoginRequiredMixin, generic.UpdateView):
     form_class = UpdateUserForm
-    template_name = 'store/update_user.html' 
+    template_name = 'store/update_user.html'
 
     def get(self, request, *args, **kwargs):
-        form = self.form_class(initial=self.initial, instance = request.user)
+        form = self.form_class(initial=self.initial, instance=request.user)
         context = {'form': form}
         return render(request, 'store/update_user.html', context)
 
     def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST, instance = request.user)
+        form = self.form_class(request.POST, instance=request.user)
         context = {'form': form}
         if form.is_valid():
             form.save()
             return HttpResponseRedirect('/')
 
-        return render(request, 'store/update_user.html', context )
+        return render(request, 'store/update_user.html', context)
+
 
 class UpdatePasswordView(LoginRequiredMixin, generic.FormView):
     form_class = PasswordChangeForm
-    template_name = 'store/change_password.html' 
+    template_name = 'store/change_password.html'
 
     def get(self, request, *args, **kwargs):
-        form = self.form_class(initial=self.initial, user = request.user)
+        form = self.form_class(initial=self.initial, user=request.user)
         context = {'form': form}
         return render(request, 'store/change_password.html', context)
 
     def post(self, request, *args, **kwargs):
-        form = self.form_class(data = request.POST, user = request.user)
+        form = self.form_class(data=request.POST, user=request.user)
         context = {'form': form}
         if form.is_valid():
             form.save()
             update_session_auth_hash(request, form.user)
             return HttpResponseRedirect('/')
 
-        return render(request, 'store/change_password.html', context )
-        
+        return render(request, 'store/change_password.html', context)
 
 
 def store(request):
+
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(
+            customer=customer, complete=False)
+        items = order.orderitem_set.all()
+        cartItems = order.get_cart_items
+
+    else:
+        items = []
+        order = {'get_cart_total': 0, 'get_cart_items': 0, 'shipping': False}
+        cartItems = order['get_cart_items']
+
     products = Product.objects.all()
-    context = {'products':products}
+    context = {'products': products, 'cartItems': cartItems}
     return render(request, 'store/store.html', context)
+
 
 def cart(request):
     if request.user.is_authenticated:
         customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        order, created = Order.objects.get_or_create(
+            customer=customer, complete=False)
         items = order.orderitem_set.all()
+        cartItems = order.get_cart_items
     else:
-        items =[]
-        order = {'get_cart_total':0, get_cart_items:0 }
-    context = {'items':items, 'order':order}
+        items = []
+        order = {'get_cart_total': 0, 'get_cart_items': 0, 'shipping': False}
+        cartItems = order['get_cart_items']
+
+    context = {'items': items, 'order': order, 'cartItems': cartItems}
     return render(request, 'store/cart.html', context)
 
+
 def checkout(request):
-    
+
     if request.user.is_authenticated:
         customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        order, created = Order.objects.get_or_create(
+            customer=customer, complete=False)
         items = order.orderitem_set.all()
+        cartItems = order.get_cart_items
     else:
-        items =[]
-        order = {'get_cart_total':0, get_cart_items:0 }
-    context = {'items':items, 'order':order}
+        items = []
+        order = {'get_cart_total': 0, 'get_cart_items': 0, 'shipping': False}
+        cartItems = order['get_cart_items']
+
+    context = {'items': items, 'order': order, 'cartItems': cartItems}
     return render(request, 'store/checkout.html', context)
+
 
 def profile(request):
     if request.user.is_authenticated:
@@ -140,12 +166,33 @@ def profile(request):
     else:
         return render('store/store.html')
 
+
 def updateItem(request):
-    data = json.loads(request.body)
+    data = json.loads(request.body.decode('utf-8'))
     productId = data['productId']
     action = data['action']
 
     print('action:', action)
     print('productId', productId)
 
+    customer = request.user.customer
+    product = Product.objects.get(id=productId)
+    order, created = Order.objects.get_or_create(
+        customer=customer, complete=False)
+    orderItem, created = OrderItem.objects.get_or_create(
+        order=order, product=product)
+
+    if action == 'add':
+        orderItem.quantity = (orderItem.quantity + 1)
+    elif action == 'remove':
+        orderItem.quantity = (orderItem.quantity - 1)
+
+    orderItem.save()
+
+    if orderItem.quantity <= 0:
+        orderItem.delete()
+
     return JsonResponse('Item was added', safe=False)
+
+
+
