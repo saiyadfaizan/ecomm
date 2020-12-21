@@ -1,4 +1,6 @@
+
 import json
+import datetime as dt
 from json import loads
 
 from django.conf import settings
@@ -15,9 +17,9 @@ from django.views import generic
 from django.views.generic import FormView, View
 from django.views.generic.edit import CreateView
 
+from store.models import Customer
 
-from .forms import (EditUserProfileForm, UpdateUserForm,
-                    UserRegisterForm)
+from .forms import EditUserProfileForm, UpdateUserForm, UserRegisterForm
 from .models import *
 
 
@@ -195,4 +197,33 @@ def updateItem(request):
     return JsonResponse('Item was added', safe=False)
 
 
+def processOrder(request):
+    transaction_id = dt.datetime.now().timestamp()
+    
+    data = json.loads(request.body.decode('utf-8'))
 
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+
+        total = float(data['form']['total'])
+        order.transaction_id = transaction_id
+
+        if total == float(order.get_cart_total):
+            order.complete = True
+        order.save()
+
+        if order.shipping == True:
+	            ShippingAddress.objects.create(
+                customer=customer,
+                order=order,
+                address=data['shipping']['address'],
+                city=data['shipping']['city'],
+                state=data['shipping']['state'],
+                zipcode=data['shipping']['zipcode'],
+                )
+
+    else:
+        print('user is not logged in')
+
+    return JsonResponse('Order Placed', safe=False)

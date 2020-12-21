@@ -13,6 +13,7 @@ urlpatterns = [
     path('checkout/', views.checkout, name="checkout"),
     path('profile/', views.profile, name="profile"),
     path('update_item/', views.updateItem, name="update_item"),
+    path('process_order/', views.processOrder, name="process_order"),
 
     path('signup/', SignUpView.as_view(), name='signup'),
     path('', LoginView.as_view(), name='login'),
