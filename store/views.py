@@ -1,8 +1,7 @@
 
-import json
 import datetime as dt
+import json
 from json import loads
-
 from django.conf import settings
 from django.contrib.auth import (authenticate, login, logout,
                                  update_session_auth_hash)
@@ -16,9 +15,6 @@ from django.urls import reverse, reverse_lazy
 from django.views import generic
 from django.views.generic import FormView, View
 from django.views.generic.edit import CreateView
-
-from store.models import Customer
-
 from .forms import EditUserProfileForm, UpdateUserForm, UserRegisterForm
 from .models import *
 
