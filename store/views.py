@@ -160,7 +160,8 @@ def profile(request):
                 form.save()
         else:
             form = EditUserProfileForm(instance=request.user)
-        return render(request, 'store/profile.html', {'name': request.user, 'form': form})
+        return render(request, 'store/profile.html',
+                      {'name': request.user, 'form': form})
     else:
         return render('store/store.html')
 
@@ -195,12 +196,13 @@ def updateItem(request):
 
 def processOrder(request):
     transaction_id = dt.datetime.now().timestamp()
-    
+
     data = json.loads(request.body.decode('utf-8'))
 
     if request.user.is_authenticated:
         customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        order, created = Order.objects.get_or_create(
+            customer=customer, complete=False)
 
         total = float(data['form']['total'])
         order.transaction_id = transaction_id
@@ -209,15 +211,15 @@ def processOrder(request):
             order.complete = True
         order.save()
 
-        if order.shipping == True:
-	            ShippingAddress.objects.create(
+        if order.shipping:
+            ShippingAddress.objects.create(
                 customer=customer,
                 order=order,
                 address=data['shipping']['address'],
                 city=data['shipping']['city'],
                 state=data['shipping']['state'],
                 zipcode=data['shipping']['zipcode'],
-                )
+            )
 
     else:
         print('user is not logged in')
