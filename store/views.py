@@ -1,7 +1,9 @@
 
 import datetime as dt
 import json
+from itertools import product
 from json import loads
+
 from django.conf import settings
 from django.contrib.auth import (authenticate, login, logout,
                                  update_session_auth_hash)
@@ -15,6 +17,7 @@ from django.urls import reverse, reverse_lazy
 from django.views import generic
 from django.views.generic import FormView, View
 from django.views.generic.edit import CreateView
+
 from .forms import EditUserProfileForm, UpdateUserForm, UserRegisterForm
 from .models import *
 
@@ -49,7 +52,8 @@ class LoginView(generic.View):
             else:
                 return HttpResponse("Inactive user.")
         else:
-            return HttpResponseRedirect(settings.LOGIN_REDIRECT_URL)
+            #return HttpResponse('Wrong Password')
+            return render(request, 'store/wrongpassword.html')
 
         return render(request, "store/store.html")
 
@@ -59,7 +63,6 @@ class LogoutView(generic.RedirectView):
     def get_redirect_url(self, *args, **kwargs):
         logout(self.request)
         return reverse('login')
-
 
 class UpdateUserView(LoginRequiredMixin, generic.UpdateView):
     form_class = UpdateUserForm
@@ -225,3 +228,21 @@ def processOrder(request):
         print('user is not logged in')
 
     return JsonResponse('Order Placed', safe=False)
+
+class OrderHistory(View):
+
+    def get(self, request):
+        email = str(request.user.email)
+        order_details = Order.objects.filter(emailAddress=email)
+        context = {'order_details': order_details}
+        return render(request, 'store/order_history.html', context)
+
+class ViewOrder(View):
+
+    def get(self, request, order_id):
+        email = str(request.user.email)
+        order = Order.objects.get(id=order_id, emailAddress=email)
+        order_items = OrderItem.objects.filter(order=order)
+        context = {'order': order, 'order_items': order_items}
+        return render(request, 'store/order_detail.html', context)
+

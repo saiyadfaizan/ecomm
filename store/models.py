@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models.fields.related import ForeignKey
 
 # Create your models here.
 
@@ -12,14 +13,26 @@ class Customer(models.Model):
         on_delete=models.CASCADE)
     name = models.CharField(max_length=200, null=True)
     email = models.CharField(max_length=200)
+    
 
     def __str__(self):
         return self.name
 
+class Category(models.Model):
+   
+    name = models.CharField(max_length=250, unique=True)
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.name
+    
+
 
 class Product(models.Model):
     name = models.CharField(max_length=200)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
     price = models.FloatField()
+    description = models.TextField(blank=True)
     digital = models.BooleanField(default=False, null=True, blank=True)
     image = models.ImageField(null=True, blank=True)
 
@@ -41,6 +54,7 @@ class Order(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         blank=True)
+    emailAddress = models.EmailField(max_length=250, blank=True)
     date_ordered = models.DateTimeField(auto_now_add=True)
     complete = models.BooleanField(default=False)
     transaction_id = models.CharField(max_length=100, null=True)
@@ -75,6 +89,7 @@ class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
     quantity = models.IntegerField(default=0, null=True, blank=True)
     date_added = models.DateTimeField(auto_now_add=True)
+    
 
     @property
     def get_total(self):
