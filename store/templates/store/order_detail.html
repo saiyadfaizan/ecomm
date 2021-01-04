@@ -21,25 +21,34 @@
                 <table class="table table-bordered">
                     <tr>
                         <td class="text-left" colspan="2">
-                            <b>Order:</b> #{{ order.id }} 
+                            <strong>Order:</strong> #{{ order.id }} 
                             <br>
-                            <b>Date: </b>{{ order.date_ordered|date:"d M Y" }} 
+                            <strong>Date: </strong>{{ order.date_ordered|date:"d M Y" }} 
                             <br>
-                            <b>Order Total:</b>&#x20B9;{{ order.get_cart_total|floatformat:2 }} 
+                            <strong>Order Total:</strong>&#x20B9;{{ order.get_cart_total|floatformat:2 }} 
                             <br>
-                            <b>Payment Status:</b>Completed.
+                            <strong>Payment Status:</strong>Completed.
                         </td>
-                        
+                        <td class="text-left" colspan="2">
+                            <strong>Username: </strong>{{user.username}}
+                            <br>
+                            <strong>Name: </strong>{{user.first_name}} {{user.last_name}}
+                            <br>
+                            <strong>Email: </strong>{{user.email}}
+
+                        </td>
                     </tr>
                     <tr>
                         <td><b>Product Description</b></td>
                         <td><b>Qty</b></td>
+                        <td><b>Image</b></td>
                         <td><b>Unit Price</b></td>
                     </tr>
                     {% for item in order_items %}
                     <tr>
                         <td>{{ item.product.name }}</td>
                         <td>{{ item.quantity }}</td>
+                        <td><img class="row-image" src="{{item.product.imageURL}}"></td>
                         <td>&#x20B9;{{item.product.price|floatformat:2}}</td>
                         
                     </tr>
@@ -56,9 +65,10 @@
                         <td class="text-left" colspan="2">
                             <b>Shipping Address:</b> <br>
                             
+                            
                         </td>
                         <td class="text-left" colspan="2">
-                            <b>Paymebt Details:</b> <br>
+                            <b>Payment Details:</b> <br>
                             The order #{{ order.id }} has been paid successfully
                         </td>
                     </tr>

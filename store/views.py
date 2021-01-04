@@ -3,6 +3,8 @@ import datetime as dt
 import json
 from itertools import product
 from json import loads
+from django.db.models import Q
+
 
 from django.conf import settings
 from django.contrib.auth import (authenticate, login, logout,
@@ -15,11 +17,12 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.views import generic
-from django.views.generic import FormView, View
+from django.views.generic import FormView, View, ListView
 from django.views.generic.edit import CreateView
 
 from .forms import EditUserProfileForm, UpdateUserForm, UserRegisterForm
 from .models import *
+from .filters import ProductFilter
 
 
 class SignUpView(SuccessMessageMixin, CreateView):
@@ -246,3 +249,19 @@ class ViewOrder(View):
         context = {'order': order, 'order_items': order_items}
         return render(request, 'store/order_detail.html', context)
 
+
+class SearchView(ListView):
+    model = Product
+    template_name = 'store/search.html'
+    context_object_name = 'products'
+
+    def get_queryset(self):
+        query = self.request.GET.get('query')
+        products = Product.objects.filter(Q(name__icontains=query) | Q(description__icontains=query) | Q(category__name__icontains=query))
+        return products
+
+
+'''
+sb-d4n3y4174201@personal.example.com
+J{/bw5?t
+'''

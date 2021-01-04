@@ -5,7 +5,7 @@ from django.urls import path
 
 from . import views
 from .views import (LoginView, LogoutView, SignUpView, UpdatePasswordView,
-                    UpdateUserView, OrderHistory, ViewOrder)
+                    UpdateUserView, OrderHistory, ViewOrder, SearchView)
 
 urlpatterns = [
     path('store/', views.store, name="store"),
@@ -16,6 +16,7 @@ urlpatterns = [
     path('process_order/', views.processOrder, name="process_order"),
     path('order_history/', OrderHistory.as_view(), name='order_history'),
     path('order/<int:order_id>', ViewOrder.as_view(), name='order_detail'),
+    path('search/', SearchView.as_view(), name='search'),
    
 
     path('signup/', SignUpView.as_view(), name='signup'),

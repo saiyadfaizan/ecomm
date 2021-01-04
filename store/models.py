@@ -13,14 +13,13 @@ class Customer(models.Model):
         on_delete=models.CASCADE)
     name = models.CharField(max_length=200, null=True)
     email = models.CharField(max_length=200)
-    
 
     def __str__(self):
         return self.name
 
 class Category(models.Model):
    
-    name = models.CharField(max_length=250, unique=True)
+    name = models.CharField(max_length=250, unique=True, null=True)
     description = models.TextField(blank=True)
 
     def __str__(self):
@@ -30,7 +29,7 @@ class Category(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=200)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=False, blank=True)
     price = models.FloatField()
     description = models.TextField(blank=True)
     digital = models.BooleanField(default=False, null=True, blank=True)
