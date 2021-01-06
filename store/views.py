@@ -22,7 +22,7 @@ from django.views.generic.edit import CreateView
 
 from .forms import EditUserProfileForm, UpdateUserForm, UserRegisterForm
 from .models import *
-from .filters import ProductFilter
+from .filters import CategoryFilter
 
 
 class SignUpView(SuccessMessageMixin, CreateView):
@@ -259,6 +259,16 @@ class SearchView(ListView):
         query = self.request.GET.get('query')
         products = Product.objects.filter(Q(name__icontains=query) | Q(description__icontains=query) | Q(category__name__icontains=query))
         return products
+
+def category(request):
+	
+	products = Product.objects.all()
+	myFilter = CategoryFilter(request.GET, queryset=products)
+	products = myFilter.qs 
+	context = {'products':products, 'myFilter':myFilter}
+
+	return render(request, 'store/category.html', context) 
+
 
 
 '''
