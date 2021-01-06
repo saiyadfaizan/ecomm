@@ -74,10 +74,10 @@
                     <a class="nav-link" href="{% url 'profile' %}">Profile <span class="sr-only">(current)</span></a>
                     {%endif%}
                 </li>
-                
+
                 <li class="nav-item active">
                     
-                    <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'category' %}">
+                    <form class="form-inline my-2 my-lg-0" style="color: white;" method="GET" action="{% url 'category' %}">
                         {{ myFilter.form }}
                         <button class="btn btn-outline-light" type="submit">Filter</button>
                     </form>

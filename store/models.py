@@ -55,7 +55,7 @@ class Order(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         blank=True)
-    emailAddress = models.EmailField(max_length=250, blank=True)
+    emailAddress = models.EmailField(max_length=250, blank=False)
     date_ordered = models.DateTimeField(auto_now_add=True)
     complete = models.BooleanField(default=False)
     transaction_id = models.CharField(max_length=100, null=True)

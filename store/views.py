@@ -3,8 +3,6 @@ import datetime as dt
 import json
 from itertools import product
 from json import loads
-from django.db.models import Q
-
 
 from django.conf import settings
 from django.contrib.auth import (authenticate, login, logout,
@@ -13,16 +11,17 @@ from django.contrib.auth.forms import (AuthenticationForm, PasswordChangeForm,
                                        UserCreationForm)
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.views import generic
-from django.views.generic import FormView, View, ListView
+from django.views.generic import FormView, ListView, View
 from django.views.generic.edit import CreateView
 
+from .filters import CategoryFilter
 from .forms import EditUserProfileForm, UpdateUserForm, UserRegisterForm
 from .models import *
-from .filters import CategoryFilter
 
 
 class SignUpView(SuccessMessageMixin, CreateView):
@@ -202,14 +201,17 @@ def updateItem(request):
 
 def processOrder(request):
     transaction_id = dt.datetime.now().timestamp()
+    
 
     data = json.loads(request.body.decode('utf-8'))
 
     if request.user.is_authenticated:
         customer = request.user.customer
+        
         order, created = Order.objects.get_or_create(
             customer=customer, complete=False)
-
+        
+        order.emailAddress = request.user.email
         total = float(data['form']['total'])
         order.transaction_id = transaction_id
 
@@ -226,6 +228,7 @@ def processOrder(request):
                 state=data['shipping']['state'],
                 zipcode=data['shipping']['zipcode'],
             )
+            
 
     else:
         print('user is not logged in')
