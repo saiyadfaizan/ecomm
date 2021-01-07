@@ -1,7 +1,6 @@
 
 import datetime as dt
 import json
-from itertools import product
 from json import loads
 
 from django.conf import settings
@@ -11,9 +10,11 @@ from django.contrib.auth.forms import (AuthenticationForm, PasswordChangeForm,
                                        UserCreationForm)
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.core.mail import EmailMessage
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
+from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.views import generic
 from django.views.generic import FormView, ListView, View
@@ -22,6 +23,7 @@ from django.views.generic.edit import CreateView
 from .filters import CategoryFilter
 from .forms import EditUserProfileForm, UpdateUserForm, UserRegisterForm
 from .models import *
+from .tasks import send_email_task
 
 
 class SignUpView(SuccessMessageMixin, CreateView):
@@ -272,7 +274,13 @@ def category(request):
 
 	return render(request, 'store/category.html', context) 
 
-
+def success(request):
+    
+    send_email_task(request.user.email)
+    customer = request.user.customer
+    context = {'customer':customer}
+    
+    return render(request, 'store/success.html', context)
 
 '''
 sb-d4n3y4174201@personal.example.com

@@ -20,46 +20,54 @@ It is a basic ecommerce applicaion in which following operations can be performe
 # Project Structure:
 ```
 .
-├── db.sqlite3
 ├── ecom
+│   ├── celery.py
 │   ├── __init__.py
-│   ├── settings.py settings file for the project.
-│   ├── urls.py base urls for apps of the projects
+│   ├── settings.py
+│   ├── urls.py
 │   └── wsgi.py
 ├── manage.py
-├── README.md: documentation file
-├── requirements.txt requirements needs to be install
+├── README.md
+├── requirements.txt
+├── snapshots
 ├── static
 │   ├── css
-│   │   └── main.css css file for the store app templates
+│   │   └── main.css
 │   ├── images
 │   └── js
-│       └── cart.js javascript file for the store app
+│       └── cart.js
 └── store
     ├── admin.py
     ├── apps.py
+    ├── filters.py
     ├── forms.py
-    ├── __init__.py
-    ├── migrations: database migrations
-    ├── models.py database models for store app
+    ├── models.py
+    ├── tasks.py
     ├── templates
     │   └── store
     │       ├── base.html
     │       ├── cart.html
+    │       ├── category.html
     │       ├── change_password.html
     │       ├── checkout.html
+    │       ├── email_template.html
     │       ├── login.html
     │       ├── main.html
+    │       ├── order_detail.html
+    │       ├── order_history.html
     │       ├── password_reset_complete.html
     │       ├── password_reset_confirm.html
     │       ├── password_reset_done.html
     │       ├── password_reset_form.html
     │       ├── profile.html
+    │       ├── search.html
     │       ├── signup.html
     │       ├── store.html
-    │       └── update_user.html
+    │       ├── success.html
+    │       ├── update_user.html
+    │       └── wrongpassword.html
     ├── tests.py
-    ├── urls.py url endpoints of store app
+    ├── urls.py
     └── views.py
 ```
 

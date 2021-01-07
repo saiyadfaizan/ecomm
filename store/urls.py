@@ -18,6 +18,7 @@ urlpatterns = [
     path('order/<int:order_id>', ViewOrder.as_view(), name='order_detail'),
     path('search/', SearchView.as_view(), name='search'),
     path('category/', views.category, name='category'),
+    path('success/', views.success, name='success'),
    
 
     path('signup/', SignUpView.as_view(), name='signup'),

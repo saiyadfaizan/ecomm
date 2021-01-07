@@ -32,7 +32,7 @@
      <div class="col-lg-6">
           <div class="box-element" id="form-wrapper">
                <form id="form">
-
+                    <!--
                     <div id="user-info">
 
                          <div class="form-field">
@@ -43,7 +43,7 @@
                          </div>
 
                     </div>
-
+                    -->                  
 
                     <div id="shipping-info">
 
@@ -122,14 +122,14 @@
 <script type="text/javascript">
      var shipping = '{{order.shipping}}'
      var total = '{{order.get_cart_total}}'
-
+     
      if (shipping == 'False') {
           document.getElementById('shipping-info').innerHTML = ""
      }
 
-     if (user != 'AnonymousUser') {
-          document.getElementById('user-info').innerHTML = ''
-     }
+     //if (user != 'AnonymousUser') {
+       //   document.getElementById('user-info').innerHTML = ''
+     //}
 
 
      var form = document.getElementById('form')
@@ -189,7 +189,7 @@
                .then((data) => {
                     console.log('Success:', data);
                     alert('Transaction completed. Order Placed successfully.');
-                    window.location.href = "{% url 'store' %}"
+                    window.location.href = "{% url 'success' %}"
                })
      }
 
