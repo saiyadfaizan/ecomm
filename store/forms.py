@@ -49,7 +49,12 @@ class CheckoutForm(forms.ModelForm):
         model = ShippingAddress
         fields = ['address', 'city', 'state', 'pincode']
 
+class ProductForm(forms.ModelForm):
+    
 
+    class Meta:
+        model = Product
+        fields = '__all__'
 '''
 class UpdatePasswordForm(PasswordChangeForm):
   

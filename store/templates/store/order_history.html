@@ -28,10 +28,10 @@
                     <tbody>
                         {% for order in order_details %}
                         <tr>
-                            <td>{{ order.id }}</td>
-                            <td>{{ order.date_ordered|date:"d M Y" }}</td>
-                            <td>{{ order.get_cart_total|floatformat:2 }}</td>
-                            <td>{{ order.complete }}</td>
+                            <th>#{{order.id}}</th>
+                            <td>{{order.date_ordered|date:"d M Y"}}</td>
+                            <td>{{order.get_cart_total|floatformat:2}}</td>
+                            <td>{{order.complete}}</td>
                             <td><a href="{% url 'order_detail' order.id %}">View Order</a></td>
                             
                         </tr>

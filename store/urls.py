@@ -4,8 +4,10 @@ from django.contrib.auth import views as auth_views
 from django.urls import path
 
 from . import views
-from .views import (LoginView, LogoutView, SignUpView, UpdatePasswordView,
-                    UpdateUserView, OrderHistory, ViewOrder, SearchView)
+from .views import (LoginView, LogoutView, OrderHistory, SearchView,
+                    SignUpView, UpdatePasswordView, UpdateUserView, ViewOrder, 
+                    AdminLoginView, AdminStoreView, AdminOrderDetailView, AdminOrderView,
+                    AdminProfileView, AdminAddProductView, AdminOrderStatuChangeView)
 
 urlpatterns = [
     path('store/', views.store, name="store"),
@@ -35,5 +37,14 @@ urlpatterns = [
         template_name='store/password_reset_confirm.html'), name='password_reset_confirm'),
     path('reset_password_complete/', auth_views.PasswordResetCompleteView.as_view(
         template_name='store/password_reset_complete.html'), name='password_reset_complete'),
+
+    path('admin-login/', AdminLoginView.as_view(), name='adminlogin'),
+    path('admin-store/', AdminStoreView.as_view(), name='adminstore'),
+    path('admin-order/', AdminOrderView.as_view(), name='adminorder'),
+    path('admin-profile/', AdminProfileView.as_view(), name='adminprofile'),
+    path('admin-addproduct/', AdminAddProductView.as_view(), name='adminaddproduct'),
+    path('admin-orderdetail/<int:order_id>', AdminOrderDetailView.as_view(), name='adminorderdetail'),
+    path('admin-order-<int:order_id>-change/', AdminOrderStatuChangeView.as_view(), name="adminorderstatuschange"),
+
 
 ]
