@@ -7,7 +7,8 @@ from . import views
 from .views import (LoginView, LogoutView, OrderHistory, SearchView,
                     SignUpView, UpdatePasswordView, UpdateUserView, ViewOrder, 
                     AdminLoginView, AdminStoreView, AdminOrderDetailView, AdminOrderView,
-                    AdminProfileView, AdminAddProductView, AdminOrderStatuChangeView)
+                    AdminProfileView, AdminAddProductView, AdminOrderStatuChangeView, AdminAllProductView,
+                    admincategory, updateproduct, deleteproduct)
 
 urlpatterns = [
     path('store/', views.store, name="store"),
@@ -43,8 +44,13 @@ urlpatterns = [
     path('admin-order/', AdminOrderView.as_view(), name='adminorder'),
     path('admin-profile/', AdminProfileView.as_view(), name='adminprofile'),
     path('admin-addproduct/', AdminAddProductView.as_view(), name='adminaddproduct'),
-    path('admin-orderdetail/<int:order_id>', AdminOrderDetailView.as_view(), name='adminorderdetail'),
+    path('admin-orderdetail/<int:order_id>/', AdminOrderDetailView.as_view(), name='adminorderdetail'),
     path('admin-order-<int:order_id>-change/', AdminOrderStatuChangeView.as_view(), name="adminorderstatuschange"),
+    path('admin-category/', views.admincategory, name='admincategory'),
+    path('admin-allproduct/', AdminAllProductView.as_view(), name='adminallproduct'),
+    path('updateproduct/<str:pk>/', views.updateproduct, name='updateproduct'),
+    path('deleteproduct/<str:pk>/', views.deleteproduct, name='deleteproduct'),
+    #path('admin-updateproduct/<int:product_id>', AdminUpdateProductView.as_view(), name='adminupdateproduct'),
 
 
 ]

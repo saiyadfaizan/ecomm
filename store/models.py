@@ -79,7 +79,7 @@ class Order(models.Model):
     transaction_id = models.CharField(max_length=100, null=True)
 
     status = models.CharField(
-        max_length=10,
+        max_length=20,
         choices=ORDER_STATUS,
         default='Order Received',
     )

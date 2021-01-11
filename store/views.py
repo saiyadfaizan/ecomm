@@ -22,8 +22,8 @@ from django.views.generic import (DetailView, FormView, ListView, TemplateView,
                                   View)
 from django.views.generic.edit import CreateView
 
-from .filters import CategoryFilter
-from .forms import EditUserProfileForm, UpdateUserForm, UserRegisterForm, ProductForm
+from .filters import CategoryFilter, OrderFilter
+from .forms import EditUserProfileForm, UpdateUserForm, UserRegisterForm, ProductForm, ProductUpdateForm
 from .models import *
 from .tasks import send_email_task
 
@@ -251,7 +251,8 @@ class ViewOrder(View):
         email = str(request.user.email)
         order = Order.objects.get(id=order_id, emailAddress=email)
         order_items = OrderItem.objects.filter(order=order)
-        context = {'order': order, 'order_items': order_items}
+        shipping = ShippingAddress.objects.get(order__id=order_id)
+        context = {'order': order, 'order_items': order_items, 'shipping':shipping}
         return render(request, 'store/order_detail.html', context)
 
 
@@ -338,7 +339,8 @@ class AdminOrderDetailView(AdminRequiredMixin, View):
     def get(self, request, order_id):
         order = Order.objects.get(id=order_id)
         order_items = OrderItem.objects.filter(order=order)
-        context = {'order': order, 'order_items': order_items}
+        shipping = ShippingAddress.objects.get(order__id=order_id)
+        context = {'order': order, 'order_items': order_items, 'shipping':shipping}
         return render(request, 'store/adminpages/adminorderdetail.html', context)
 
 class AdminProfileView(AdminRequiredMixin, TemplateView):
@@ -355,6 +357,7 @@ class AdminAddProductView(FormView):
     success_url = reverse_lazy('adminstore')
     template_name = 'store/adminpages/adminaddproduct.html'
     
+        
     def form_valid(self, form):
         form.save()
         return redirect(self.success_url )
@@ -362,16 +365,57 @@ class AdminAddProductView(FormView):
 
 class AdminOrderStatuChangeView(AdminRequiredMixin, View):
     def post(self, request, *args, **kwargs):
-        order_id = self.kwargs["order_id"]
-        order_obj = Order.objects.get(id=order_id)
-        new_status = request.POST.get("status")
-        order_obj.order_status = new_status
-        order_obj.save()
-        return redirect(reverse_lazy("adminorder", kwargs={"order_id": order_id}))
+        order_id = self.kwargs['order_id']
+        order = Order.objects.get(id=order_id)
+        new_status = request.POST.get('status')
+        order.status = new_status
+        order.save()
+        return redirect(reverse_lazy('adminorderdetail', kwargs={'order_id': order_id}))
+
+def admincategory(request):
+	
+	orders = Order.objects.all()
+	adminFilter = OrderFilter(request.GET, queryset=orders)
+	orders = adminFilter.qs 
+	context = {'orders':orders, 'adminFilter':adminFilter}
+
+	return render(request, 'store/adminpages/admincategory.html', context) 
+
+class AdminAllProductView(AdminRequiredMixin, TemplateView):
+    template_name = 'store/adminpages/adminallproduct.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        allproducts = Product.objects.all()
+        context = {'allproducts': allproducts}
+        return context
+
+def updateproduct(request, pk):
+    product = Product.objects.get(id=pk)
+    form = ProductUpdateForm(instance=product)
+
+    if request.method == 'POST':
+       form = ProductUpdateForm(request.POST, instance=product)
+       if form.is_valid():
+           form.save()
+       return redirect('adminallproduct')
+
+    context = {'form':form}
+
+    return render(request, 'store/adminpages/editproduct.html', context)
 
 
+def deleteproduct(request, pk):
+    product = Product.objects.get(id=pk)
 
+    if request.method == 'POST':
+        product.delete()
+        return redirect('adminallproduct')
 
+    context = {'product':product}
+
+    return render(request, 'store/adminpages/deleteproduct.html', context)
+    
 '''
 sb-d4n3y4174201@personal.example.com
 J{/bw5?t

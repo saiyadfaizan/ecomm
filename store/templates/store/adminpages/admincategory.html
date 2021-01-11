@@ -1,14 +1,14 @@
-{% extends 'store/adminpages/adminmain.html' %}
+{% extends 'store/main.html' %}
 {% load static %}
 {% block content %}
 
+        
     <div class="container">
         <div class="row">
 
             <div class="col-md-12">
                 <h3>All Orders</h3>
                 <hr>
-                
                 <table class="table">
                     <thead>
                         <tr>
@@ -22,10 +22,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for order in allorders %}
+                        {% for order in orders %}
                         <tr>
                             <td>{{forloop.counter}}</td>
-                            <td>#T20-{{order.id}}</td>
+                            <td>#{{order.id}}</td>
                             <td>{{order.customer}}</td>
                             <td>{{order.date_ordered|date:"d M Y"}}</td>
                             <td>{{order.get_cart_total|floatformat:2}}</td>
@@ -38,7 +38,7 @@
                                         <option value="{{i}}" {% if i == order.status %}selected{% endif %}>{{j}}</option>
                                         {% endfor %}
                                     </select>
-                                    <button class=" btn btn-outline-info btn-sm">Update</button>
+                                    <button class="btn btn-info btn-sm">Update</button>
                                     
                                 </form>
                             </td>
@@ -53,9 +53,5 @@
 
         </div>
 
-        
 
 {% endblock content %}
-
-
-

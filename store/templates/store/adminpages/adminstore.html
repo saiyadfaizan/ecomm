@@ -3,7 +3,7 @@
 {% block content %}
 {%if user.is_authenticated%}
 Welcome
-<strong>{{user.first_name}},</strong>
+<strong>{{user.username}},</strong>
 <br />
 {%endif%}
 <div class="row">
@@ -14,9 +14,9 @@ Welcome
           <div class="box-element product">
                <h6><strong>{{product.name}}</strong></h6>
                <hr>
-               <button data-product={{product.id}} data-action="add"
-                    class="btn btn-outline-secondary add-btn update-cart">Add to cart</button>
-               <a class="btn btn-outline-success" href="#">View</a>
+               <a href="{% url 'updateproduct' product.id %}" class="btn btn-outline-success ">Edit</a>
+               <a href="{% url 'deleteproduct' product.id %}" class="btn btn-outline-danger ">Delete</a>
+
                <h4 style="display: inline-block; float:right;"><strong>&#x20B9;{{product.price|floatformat:2}}</strong>
                </h4>
 
@@ -27,8 +27,3 @@ Welcome
 
 </div>
 {% endblock content %}
-
-
-
-
-

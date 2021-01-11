@@ -5,8 +5,6 @@
     <div class="col-lg-12">
         <div class="box-element">
             <a class="btn btn-outline-dark" href="{% url 'order_history' %}">&#x2190; Back to Orders</a>
-            <br>
-            <br>
             <hr>
         </div>
 
@@ -35,6 +33,11 @@
                             <strong>Name: </strong>{{user.first_name}} {{user.last_name}}
                             <br>
                             <strong>Email: </strong>{{user.email}}
+                            <br>
+                            <strong>Transaction ID:</strong>{{order.transaction_id}}
+                            <br>
+                            <strong>Order Status:</strong> {{ order.status }} 
+                            
 
                         </td>
                     </tr>
@@ -63,8 +66,11 @@
                     </tr>
                     <tr>
                         <td class="text-left" colspan="2">
-                            <b>Transaction id:</b> <br>
-                            {{order.transaction_id}}
+                            <b>Shipping address:</b> <br>
+                            {{shipping.address}}, <br>
+                            {{shipping.city}}, <br>
+                            {{shipping.state}}
+                            {{shipping.zipcode}}
                         </td>
                         <td class="text-left" colspan="2">
                             <b>Payment Details:</b> <br>
