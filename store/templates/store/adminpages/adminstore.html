@@ -14,8 +14,8 @@ Welcome
           <div class="box-element product">
                <h6><strong>{{product.name}}</strong></h6>
                <hr>
-               <a href="{% url 'updateproduct' product.id %}" class="btn btn-outline-success ">Edit</a>
-               <a href="{% url 'deleteproduct' product.id %}" class="btn btn-outline-danger ">Delete</a>
+               <a href="{% url 'updateproduct' product.id %}" class="btn btn-outline-secondary">Edit</a>
+               <a href="{% url 'deleteproduct' product.id %}" class="btn btn-outline-danger">Delete</a>
 
                <h4 style="display: inline-block; float:right;"><strong>&#x20B9;{{product.price|floatformat:2}}</strong>
                </h4>

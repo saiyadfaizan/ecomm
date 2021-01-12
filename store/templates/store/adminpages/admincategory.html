@@ -1,4 +1,4 @@
-{% extends 'store/main.html' %}
+{% extends 'store/adminpages/adminmain.html' %}
 {% load static %}
 {% block content %}
 
@@ -18,7 +18,7 @@
                             <th>Ordered On</th>
                             <th>Amount</th>
                             <th>Payment</th>
-                            <th>Status</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -30,18 +30,6 @@
                             <td>{{order.date_ordered|date:"d M Y"}}</td>
                             <td>{{order.get_cart_total|floatformat:2}}</td>
                             <td>{{order.complete}}</td>
-                            <td>
-                                <form action="{% url 'adminorderstatuschange' order.id  %}" method="POST">
-                                    {% csrf_token %}
-                                    <select name="status">
-                                        {% for i, j in allstatus %}
-                                        <option value="{{i}}" {% if i == order.status %}selected{% endif %}>{{j}}</option>
-                                        {% endfor %}
-                                    </select>
-                                    <button class="btn btn-info btn-sm">Update</button>
-                                    
-                                </form>
-                            </td>
                             <td><a href="{% url 'adminorderdetail' order.id %}">View Order</a></td>
                         </tr>
                         {% endfor %}

@@ -41,6 +41,11 @@ INSTALLED_APPS = [
     #additional apps
     'store',
     'django_filters',
+    'api',
+    'rest_framework',
+    'rest_auth',
+    'rest_framework.authtoken',
+    'rest_auth.registration',
 ]
 
 MIDDLEWARE = [
@@ -150,3 +155,10 @@ EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}

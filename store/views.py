@@ -219,6 +219,7 @@ def processOrder(request):
 
         if total == float(order.get_cart_total):
             order.complete = True
+            order.status = 'Order Received'
         order.save()
 
         if order.shipping:
@@ -282,6 +283,14 @@ def success(request):
     context = {'customer':customer}
     
     return render(request, 'store/success.html', context)
+
+
+
+
+
+# admin views:
+
+
 
 
 class AdminLoginView(FormView):
@@ -417,6 +426,7 @@ def deleteproduct(request, pk):
     return render(request, 'store/adminpages/deleteproduct.html', context)
     
 '''
+Paypal credendials:
 sb-d4n3y4174201@personal.example.com
 J{/bw5?t
 '''

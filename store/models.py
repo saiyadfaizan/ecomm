@@ -7,6 +7,7 @@ from django.db.models.fields.related import ForeignKey
 # Create your models here.
 
 ORDER_STATUS = (
+    ("Order Initiated", "Order Initiated"),
     ("Order Received", "Order Received"),
     ("Order Processing", "Order Processing"),
     ("On the way", "On the way"),
@@ -81,7 +82,7 @@ class Order(models.Model):
     status = models.CharField(
         max_length=20,
         choices=ORDER_STATUS,
-        default='Order Received',
+        default='Order Initiated',
     )
 
 
