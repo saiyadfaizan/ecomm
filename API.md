@@ -1,9 +1,10 @@
-APIs Details
+#APIs Details:
+
 Base URL for all API endpoints : http://127.0.0.1:8000/api/
 
 Following API endpoints available in api app.
 
-1. View all products:
+1. #View all products:
    This API will list the data of all the products stored in the database. This API will be accessed by administrator/super users only.
    To hit this API, first login through: http://127.0.0.1:8000/admin-login/
 
@@ -25,7 +26,7 @@ data:
 .
 ]
 
-2. Orders list:
+2. #Orders list:
 This API will return list of all the orders stored in the database.
 
 Methods: GET, HEAD, OPTIONS
@@ -46,7 +47,7 @@ data:
 .
 ]
 
-3. admin-detail
+3. #admin-detail
    This API will return admin detail.
 
 Methods: GET, HEAD, OPTIONS
