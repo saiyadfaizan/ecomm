@@ -10,6 +10,31 @@ It is a basic ecommerce applicaion in which following operations can be performe
     - forget password: http://127.0.0.1:8000/accounts/reset_password/ 
     - update password: http://127.0.0.1:8000/accounts/change_password/
     - user profile edit: http://127.0.0.1:8000/accounts/update_user/
+# Features:
+
+Admin side:
+
+1. Add new products.
+2. Edit details of the existing products.
+3. Delete existing products.
+4. View all orders.
+5. Change order status.
+6. Filter orders based on their status.
+7. View the order details.
+
+User side:
+
+
+1. Registration and authentication.
+2. Add and remove products to cart.
+3. Update the quantity of cart.
+4. Payment can be done with paypal.
+5. Products can be filtered by category.
+6. Search filter.
+7. Confirmation email after order successfully placed.
+8. View complete order history.
+9. View order details.
+10. Update profile details.
 
 # Technology stack:
 1. Python 3.6.5
