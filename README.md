@@ -1,15 +1,5 @@
-# E-commerce website using Django:
-It is a basic ecommerce applicaion in which following operations can be performed:
-
-    - visit the store: http://127.0.0.1:8000/store/
-    - check and update the cart: http://127.0.0.1:8000/cart/
-    - see the checkout page: http://127.0.0.1:8000/checkout/
-    - user signup via email/user name: http://127.0.0.1:8000/accounts/signup/
-    - login: http://127.0.0.1:8000/accounts/
-    - logout: http://127.0.0.1:8000/accounts/logout/
-    - forget password: http://127.0.0.1:8000/accounts/reset_password/ 
-    - update password: http://127.0.0.1:8000/accounts/change_password/
-    - user profile edit: http://127.0.0.1:8000/accounts/update_user/
+# E-commerce web apllication using Django:
+Ecommerce project made with Django and basic HTML & CSS. I have used both class-based and functional views throughout the project, Celery for handling emails and Django-Filter for category filtering. API's for admin side are included in the app named api. For payment integration, I have used Paypal's API.
 # Features:
 
 Admin side:
