@@ -1,7 +1,7 @@
 # **E-commerce web application using Django:**
 Ecommerce project made with Django and basic HTML & CSS. I have used both class-based and functional views throughout the project, PostgreSQL for database, Celery for handling emails and Django-Filter for category filtering. API's for admin side are included in the app named api. For payment integration, I have used Paypal's API.
 
-    ![Store](https://github.com/saiyadfaizan/ecomm/blob/master/snapshots/user_interface/user_store.png)
+![](snapshots/user_interface/store_.png)
 
 # Features:
 
