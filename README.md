@@ -1,5 +1,7 @@
 # **E-commerce web application using Django:**
-Ecommerce project made with Django and basic HTML & CSS. I have used both class-based and functional views throughout the project, Celery for handling emails and Django-Filter for category filtering. API's for admin side are included in the app named api. For payment integration, I have used Paypal's API.
+Ecommerce project made with Django and basic HTML & CSS. I have used both class-based and functional views throughout the project, PostgreSQL for database, Celery for handling emails and Django-Filter for category filtering. API's for admin side are included in the app named api. For payment integration, I have used Paypal's API.
+
+    ![Store](https://github.com/saiyadfaizan/ecomm/blob/master/snapshots/user_interface/user_store.png)
 
 # Features:
 
@@ -29,7 +31,7 @@ Ecommerce project made with Django and basic HTML & CSS. I have used both class-
 # Technology stack:
 1. Python 3.6.5
 2. Django REST Framework 2.1
-3. sqlite3 Database
+3. PostgreSQL 13.1 Database
 4. Google Chrome
 
 # Project Structure:
@@ -112,14 +114,6 @@ Ecommerce project made with Django and basic HTML & CSS. I have used both class-
     ├── urls.py: url endpoints of store app
     └── views.py: These views are called by store app endpoints
 ```
-
-# Running Locally:
-First, clone the repository to your local machine:
-git clone https://github.com/saiyadfaizan/ecomm.git
-
-# Create super user:
-python manage.py createsuperuser 
-
 
 # Steps to run the project:
 1. First, clone the repository to your local machine:
