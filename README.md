@@ -1,30 +1,30 @@
-# E-commerce web apllication using Django:
+# **E-commerce web application using Django:**
 Ecommerce project made with Django and basic HTML & CSS. I have used both class-based and functional views throughout the project, Celery for handling emails and Django-Filter for category filtering. API's for admin side are included in the app named api. For payment integration, I have used Paypal's API.
+
 # Features:
 
-Admin side:
+### Admin side:
 
-1. Add new products.
-2. Edit details of the existing products.
-3. Delete existing products.
-4. View all orders.
-5. Change order status.
-6. Filter orders based on their status.
-7. View the order details.
+* Add new products.
+* Edit details of the existing products.
+* Delete existing products.
+* View all orders.
+* Change order status.
+* Filter orders based on their status.
+* View the order details.
 
-User side:
+### User side:
 
-
-1. Registration and authentication.
-2. Add and remove products to cart.
-3. Update the quantity of cart.
-4. Payment can be done with paypal.
-5. Products can be filtered by category.
-6. Search filter.
-7. Confirmation email after order successfully placed.
-8. View complete order history.
-9. View order details.
-10. Update profile details.
+* Registration and authentication.
+* Add and remove products to cart.
+* Update the quantity of cart.
+* Payment can be done with paypal.
+* Products can be filtered by category.
+* Search filter.
+* Confirmation email after order successfully placed.
+* View complete order history.
+* View order details.
+* Update profile details.
 
 # Technology stack:
 1. Python 3.6.5
@@ -44,6 +44,7 @@ User side:
 │   ├── tests.py
 │   ├── urls.py: urls for api app
 │   └── views.py: These views are called by API endpoints
+├── API.md: API documentation file
 ├── ecom Ecommerce project base folder
 │   ├── celery.py: contains the default code needed for celery
 │   ├── __init__.py
@@ -118,16 +119,40 @@ git clone https://github.com/saiyadfaizan/ecomm.git
 
 # Create super user:
 python manage.py createsuperuser 
-Note: It will prompt to enter username, email and password one by one. Please remember the username and password,
-it will be used to login admin area.
+
 
 # Steps to run the project:
-1. Install the requirements: pip install -r requirements/dev.txt
-2. Create the .env file to the root directory of the project. You can refer this example file- .env.example
-2. Check for the database migrations: python manage.py makemigrations
-3. Apply the database migrations: python manage.py migrate
-4. Run the developement server: python manage.py runserver
-5. Open chrome and the site will be available at: 127.0.0.1:8000/
+1. First, clone the repository to your local machine:
+    ```bash
+   git clone https://github.com/saiyadfaizan/ecomm.git
+   ```
+2. Create super user:
+    ```bash
+    python manage.py createsuperuser
+    ```
+    _Note: It will prompt to enter username, email and password one by one. Please remember the username and password, it will be used to login admin area._
+
+3. Install the requirements: 
+    ```bash 
+    pip install -r requirements/dev.txt
+    ```
+
+4. Create the .env file to the root directory of the project. 
+    >You can refer this example file:  .env.example
+
+5. Check for the database migrations: 
+    ```bash 
+    python manage.py makemigrations
+    ```
+6. Apply the database migrations:
+    ```bash 
+    python manage.py migrate
+    ```
+7. Run the developement server: 
+    ```bash 
+    python manage.py runserver
+    ```
+8. Open chrome and the site will be available [here](127.0.0.1:8000/)
 
 # Future scope of the project:
 1. Integrating new payment gateways.
