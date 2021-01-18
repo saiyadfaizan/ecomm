@@ -22,17 +22,17 @@ class ProductAdmin(admin.ModelAdmin):
 
 class OrderAdmin(admin.ModelAdmin):
     list_display = ['id', 'customer', 'emailAddress', 'date_ordered', 'complete', 'transaction_id', 'status']
-    search_fields = ['id', 'customer', 'emailAddress']
+    search_fields = ['id', 'customer__name', 'emailAddress']
     list_filter =['complete', 'status', 'date_ordered']
 
 class OrderItemAdmin(admin.ModelAdmin):
     list_display = ['id', 'product', 'order', 'quantity', 'date_added']
-    search_fields = ['date_added', 'order']
+    search_fields = ['date_added']
     list_filter =['date_added']
 
 class ShippingAddressAdmin(admin.ModelAdmin):
     list_display = ['id', 'customer', 'order', 'address', 'city', 'state', 'zipcode', 'date_added']
-    search_fields = ['customer', 'order']
+    search_fields = ['customer__name', 'order__emailAddress']
     list_filter =['city', 'state']
 
 

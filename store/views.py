@@ -21,14 +21,18 @@ from django.views import generic
 from django.views.generic import (DetailView, FormView, ListView, TemplateView,
                                   View)
 from django.views.generic.edit import CreateView
-
 from .filters import CategoryFilter, OrderFilter
 from .forms import EditUserProfileForm, UpdateUserForm, UserRegisterForm, ProductForm, ProductUpdateForm
 from .models import *
 from .tasks import send_email_task
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
-# admin views:
+def index(request):
+    context = {}
+    return render(request, 'store/index.html', context)
+    
+# Views for Admin side:
 
 class AdminLoginView(FormView):
     form_class = AuthenticationForm
@@ -42,7 +46,8 @@ class AdminLoginView(FormView):
         if user is not None and Admin.objects.filter(user=user).exists():
             login(self.request, user)
         else:
-            return render(self.request, self.template_name, {"form": self.form_class, "error": "Invalid credentials"})
+            return render(self.request, self.template_name, {"form": self.form_class, 
+            "error": "Invalid credentials"})
 
         return super().form_valid(form)
 
@@ -77,7 +82,6 @@ class AdminOrderView(TemplateView, AdminRequiredMixin):
         allstatus = ORDER_STATUS
         context = {'allorders': allorders, 'allstatus':allstatus}
         return context
-
 
 
 class AdminOrderDetailView(AdminRequiredMixin, View):
@@ -162,7 +166,7 @@ def deleteproduct(request, pk):
 
     return render(request, 'store/adminpages/deleteproduct.html', context)
 
-# user-side views
+# Views for User side:
 
 class SignUpView(SuccessMessageMixin, CreateView):
     template_name = 'store/signup.html'
@@ -186,9 +190,9 @@ class LoginView(generic.View):
             password = request.POST['password']
             user = authenticate(username=username, password=password)
 
-            if user is not None:
+            if user is not None and Customer.objects.filter(user=user).exists():
                 login(request, user)
-                return HttpResponseRedirect('store')
+                return redirect('store')
             else:
                 return HttpResponse("Inactive user.")
         else:
@@ -197,12 +201,30 @@ class LoginView(generic.View):
 
         return render(request, "store/store.html")
 
+'''
+
+class LoginView(FormView):
+    form_class = AuthenticationForm
+    template_name = 'store/login.html'
+    success_url = reverse_lazy('store')
+
+    def form_valid(self, form):
+        username = form.cleaned_data.get("username")
+        password = form.cleaned_data["password"]
+        user = authenticate(username=username, password=password)
+        if user is not None and Customer.objects.filter(user=user).exists():
+            login(self.request, user)
+        else:
+            return render(self.request, self.template_name, {"form": self.form_class, "error": "Invalid credentials"})
+
+        return super().form_valid(form)
+'''
 
 class LogoutView(generic.RedirectView):
 
     def get_redirect_url(self, *args, **kwargs):
         logout(self.request)
-        return reverse('login')
+        return reverse('index')
 
 class UpdateUserView(LoginRequiredMixin, generic.UpdateView):
     form_class = UpdateUserForm
@@ -218,7 +240,7 @@ class UpdateUserView(LoginRequiredMixin, generic.UpdateView):
         context = {'form': form}
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/')
+            return redirect('profile')
 
         return render(request, 'store/update_user.html', context)
 
@@ -242,60 +264,52 @@ class UpdatePasswordView(LoginRequiredMixin, generic.FormView):
 
         return render(request, 'store/change_password.html', context)
 
-@login_required
+@login_required()
 def store(request):
+    
+    customer = request.user.customer
+    order, created = Order.objects.get_or_create(customer=customer, complete=False)
+    items = order.orderitem_set.all()
+    cartItems = order.get_cart_items
+    #products = Product.objects.all()
+    
+    product_list = Product.objects.all()
+    page = request.GET.get('page', 1)
 
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(
-            customer=customer, complete=False)
-        items = order.orderitem_set.all()
-        cartItems = order.get_cart_items
+    paginator = Paginator(product_list, 9)
+    try:
+        products = paginator.page(page)
+    except PageNotAnInteger:
+        products = paginator.page(1)
+    except EmptyPage:
+        products = paginator.page(paginator.num_pages)
 
-    else:
-        items = []
-        order = {'get_cart_total': 0, 'get_cart_items': 0, 'shipping': False}
-        cartItems = order['get_cart_items']
-
-    products = Product.objects.all()
     context = {'products': products, 'cartItems': cartItems}
     return render(request, 'store/store.html', context)
 
-
+@login_required()
 def cart(request):
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(
-            customer=customer, complete=False)
-        items = order.orderitem_set.all()
-        cartItems = order.get_cart_items
-    else:
-        items = []
-        order = {'get_cart_total': 0, 'get_cart_items': 0, 'shipping': False}
-        cartItems = order['get_cart_items']
 
+    customer = request.user.customer
+    order, created = Order.objects.get_or_create(customer=customer, complete=False)
+    items = order.orderitem_set.all().order_by('product__name')
+    cartItems = order.get_cart_items
     context = {'items': items, 'order': order, 'cartItems': cartItems}
     return render(request, 'store/cart.html', context)
 
-
+@login_required()
 def checkout(request):
 
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(
-            customer=customer, complete=False)
-        items = order.orderitem_set.all()
-        cartItems = order.get_cart_items
-    else:
-        items = []
-        order = {'get_cart_total': 0, 'get_cart_items': 0, 'shipping': False}
-        cartItems = order['get_cart_items']
-
+    customer = request.user.customer
+    order, created = Order.objects.get_or_create(customer=customer, complete=False)
+    items = order.orderitem_set.all().order_by('product__name')
+    cartItems = order.get_cart_items
     context = {'items': items, 'order': order, 'cartItems': cartItems}
     return render(request, 'store/checkout.html', context)
 
-
+@login_required()
 def profile(request):
+
     if request.user.is_authenticated:
         if request.method == 'POST':
             form = EditUserProfileForm(request.POST, instance=request.user)
@@ -308,8 +322,9 @@ def profile(request):
     else:
         return render('store/store.html')
 
-
+@login_required()
 def updateItem(request):
+
     data = json.loads(request.body.decode('utf-8'))
     productId = data['productId']
     action = data['action']
@@ -336,53 +351,45 @@ def updateItem(request):
 
     return JsonResponse('Item was added', safe=False)
 
-
+@login_required()
 def processOrder(request):
+
     transaction_id = dt.datetime.now().timestamp()
-    
-
     data = json.loads(request.body.decode('utf-8'))
+    customer = request.user.customer
+    order, created = Order.objects.get_or_create(customer=customer, complete=False)
+    order.emailAddress = request.user.email
+    total = float(data['form']['total'])
+    order.transaction_id = transaction_id
 
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        
-        order, created = Order.objects.get_or_create(
-            customer=customer, complete=False)
-        
-        order.emailAddress = request.user.email
-        total = float(data['form']['total'])
-        order.transaction_id = transaction_id
+    if total == float(order.get_cart_total):
+        order.complete = True
+        order.status = 'Order Received'
+    order.save()
 
-        if total == float(order.get_cart_total):
-            order.complete = True
-            order.status = 'Order Received'
-        order.save()
-
-        if order.shipping:
-            ShippingAddress.objects.create(
-                customer=customer,
-                order=order,
-                address=data['shipping']['address'],
-                city=data['shipping']['city'],
-                state=data['shipping']['state'],
-                zipcode=data['shipping']['zipcode'],
-            )
-            
-
-    else:
-        print('user is not logged in')
+    if order.shipping:
+        ShippingAddress.objects.create(
+            customer=customer,
+            order=order,
+            address=data['shipping']['address'],
+            city=data['shipping']['city'],
+            state=data['shipping']['state'],
+            zipcode=data['shipping']['zipcode'],
+        )
 
     return JsonResponse('Order Placed', safe=False)
 
-class OrderHistory(View):
+
+class OrderHistory(View, LoginRequiredMixin):
 
     def get(self, request):
         email = str(request.user.email)
-        order_details = Order.objects.filter(emailAddress=email)
+        order_details = Order.objects.filter(emailAddress=email).exclude(
+            status='Order Initiated').order_by('-date_ordered')
         context = {'order_details': order_details}
         return render(request, 'store/order_history.html', context)
 
-class ViewOrder(View):
+class ViewOrder(View, LoginRequiredMixin):
 
     def get(self, request, order_id):
         email = str(request.user.email)
@@ -392,6 +399,23 @@ class ViewOrder(View):
         context = {'order': order, 'order_items': order_items, 'shipping':shipping}
         return render(request, 'store/order_detail.html', context)
 
+@login_required()
+def category(request):
+	
+	products = Product.objects.all()
+	myFilter = CategoryFilter(request.GET, queryset=products)
+	products = myFilter.qs 
+	context = {'products':products, 'myFilter':myFilter}
+	return render(request, 'store/category.html', context) 
+
+@login_required()
+def success(request):
+    
+    send_email_task(request.user.email)
+    customer = request.user.customer
+    context = {'customer':customer}
+    return render(request, 'store/success.html', context)
+
 
 class SearchView(ListView):
     model = Product
@@ -400,23 +424,6 @@ class SearchView(ListView):
 
     def get_queryset(self):
         query = self.request.GET.get('query')
-        products = Product.objects.filter(Q(name__icontains=query) | Q(description__icontains=query) | Q(category__name__icontains=query))
+        products = Product.objects.filter(Q(name__icontains=query) | Q(
+            description__icontains=query) | Q(category__name__icontains=query))
         return products
-
-def category(request):
-	
-	products = Product.objects.all()
-	myFilter = CategoryFilter(request.GET, queryset=products)
-	products = myFilter.qs 
-	context = {'products':products, 'myFilter':myFilter}
-
-	return render(request, 'store/category.html', context) 
-
-def success(request):
-    
-    send_email_task(request.user.email)
-    customer = request.user.customer
-    context = {'customer':customer}
-    
-    return render(request, 'store/success.html', context)
-

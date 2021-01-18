@@ -19,11 +19,11 @@
                 <table class="table table-bordered">
                     <tr>
                         <td class="text-left" colspan="2">
-                            <strong>Order:</strong> #{{ order.id }} 
+                            <strong>Order:</strong> #{{ order.id }}
                             <br>
-                            <strong>Date: </strong>{{ order.date_ordered|date:"d M Y" }} 
+                            <strong>Date: </strong>{{ order.date_ordered|date:"d M Y" }}
                             <br>
-                            <strong>Order Total:</strong>&#x20B9;{{ order.get_cart_total|floatformat:2 }} 
+                            <strong>Order Total:</strong>&#x20B9;{{ order.get_cart_total|floatformat:2 }}
                             <br>
                             <strong>Payment Status:</strong>Completed.
                         </td>
@@ -36,8 +36,8 @@
                             <br>
                             <strong>Transaction ID:</strong>{{order.transaction_id}}
                             <br>
-                            <strong>Order Status:</strong> {{ order.status }} 
-                            
+                            <strong>Order Status:</strong> {{ order.status }}
+
 
                         </td>
                     </tr>
@@ -53,7 +53,7 @@
                         <td>{{ item.quantity }}</td>
                         <td><img class="row-image" src="{{item.product.imageURL}}"></td>
                         <td>&#x20B9;{{item.product.price|floatformat:2}}</td>
-                        
+
                     </tr>
                     {% endfor %}
                     <tr>
@@ -78,14 +78,12 @@
                         </td>
                     </tr>
                 </table>
-        
+
             </div>
         </div>
-        <br><br>
-
-
+        <br>
+        <br>
     </div>
+</div>
 
-</div>
-</div>
 {% endblock content %}

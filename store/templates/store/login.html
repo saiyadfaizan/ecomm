@@ -8,7 +8,7 @@
 				<form method="post" action="{% url 'login' %}">
 					{% csrf_token %}
 					{{ form.as_p }}
-					<button type="submit" class="btn btn-success">Log in</button>
+					<button type="submit" class="btn btn-success">Log in as User</button>
 				</form>
 				<div class="mt-4">
 					<div class="d-flex justify-content-center links">

@@ -11,7 +11,7 @@
         </strong>
     </div>
     {% elif products|length > 0 %}
-    
+
     {% for product in products %}
     <div class="col-lg-4">
         <img class="thumbnail" src="{{product.image.url}}">
@@ -29,8 +29,5 @@
     {% endfor %}
     {%endif%}
 </div>
-
-
-
 
 {% endblock content %}

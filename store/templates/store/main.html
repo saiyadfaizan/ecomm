@@ -57,24 +57,8 @@
                     <a class="nav-link" href="{% url 'store' %}">Store <span class="sr-only">(current)</span></a>
                 </li>
 
-
-                <!--
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                        Categories
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Fashion</a>
-                        <a class="dropdown-item" href="#">Electronics</a>
-                        <a class="dropdown-item" href="#">Educational</a>
-                    </div>
-                </li>
-            -->
                 <li class="nav-item active">
-                    {%if user.is_authenticated%}
                     <a class="nav-link" href="{% url 'profile' %}">Profile <span class="sr-only">(current)</span></a>
-                    {%endif%}
                 </li>
 
                 <li class="nav-item active">
@@ -92,11 +76,8 @@
             </form>
 
             <div class="form-inline my-2 my-lg-0">
-                {%if user.is_authenticated%}
+            
                 <a href="{%url 'logout'%}" class="btn btn-warning">Logout</a><br>
-                {%else%}
-                <a href="{%url 'login'%}" class="btn btn-warning">Login</a>
-                {%endif%}
 
                 <a href="{% url 'cart' %}">
                     <img id="cart-icon" src="{% static 'images/cart.png' %}">
@@ -115,11 +96,9 @@
 
 
 
-
-
-
         {% endblock content %}
     </div>
+
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
         crossorigin="anonymous"></script>
@@ -133,6 +112,7 @@
         crossorigin="anonymous"></script>
 
     <script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
+
 </body>
 
 </html>

@@ -21,7 +21,6 @@ class UserRegisterForm(UserCreationForm):
 class UpdateUserForm(UserChangeForm):
     password = None
 
-  
     class Meta:
       model = User
       fields = ['username', 'first_name', 'last_name', 'email']
@@ -51,7 +50,6 @@ class CheckoutForm(forms.ModelForm):
 
 class ProductForm(forms.ModelForm):
     
-
     class Meta:
         model = Product
         fields = '__all__'
@@ -61,12 +59,3 @@ class ProductUpdateForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = '__all__'
-
-
-'''
-class UpdatePasswordForm(PasswordChangeForm):
-  
-  class Meta:
-    model = User
-    fields = ['username', 'password']
-'''

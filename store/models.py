@@ -2,10 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.fields.related import ForeignKey
 
-
-
 # Create your models here.
-
 ORDER_STATUS = (
     ("Order Initiated", "Order Initiated"),
     ("Order Received", "Order Received"),
@@ -14,7 +11,6 @@ ORDER_STATUS = (
     ("Order Completed", "Order Completed"),
     ("Order Canceled", "Order Canceled"),
 )
-
 
 class Admin(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -43,8 +39,6 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
-    
-
 
 class Product(models.Model):
     name = models.CharField(max_length=200)
@@ -54,7 +48,6 @@ class Product(models.Model):
     digital = models.BooleanField(default=False, null=True, blank=True)
     image = models.ImageField(null=True, blank=True)
 
-    
     def __str__(self):
         return self.name
 
@@ -84,7 +77,6 @@ class Order(models.Model):
         choices=ORDER_STATUS,
         default='Order Initiated',
     )
-
 
     def __str__(self):
         return str(self.id)
@@ -122,7 +114,6 @@ class OrderItem(models.Model):
     def get_total(self):
         total = self.product.price * self.quantity
         return total
-
 
 class ShippingAddress(models.Model):
     customer = models.ForeignKey(

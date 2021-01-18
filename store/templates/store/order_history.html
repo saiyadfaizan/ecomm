@@ -1,6 +1,7 @@
 {% extends 'store/main.html' %}
 {% load static %}
 {% block content %}
+
 <div class="row">
     <div class="col-lg-12">
         <div class="box-element">
@@ -33,25 +34,20 @@
                             <td>{{order.get_cart_total|floatformat:2}}</td>
                             <td>{{order.complete}}</td>
                             <td><a href="{% url 'order_detail' order.id %}">View Order</a></td>
-                            
+
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
                 {% else %}
                 <p>You have not placed any orders yet.
-                    <br><br>
+                    <br>
+                    <br>
                 </p>
                 {% endif %}
-
-
-
             </div>
-
-
-
         </div>
-
     </div>
 </div>
+
 {% endblock content %}

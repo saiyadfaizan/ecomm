@@ -8,9 +8,10 @@ from .views import (LoginView, LogoutView, OrderHistory, SearchView,
                     SignUpView, UpdatePasswordView, UpdateUserView, ViewOrder, 
                     AdminLoginView, AdminStoreView, AdminOrderDetailView, AdminOrderView,
                     AdminProfileView, AdminAddProductView, AdminOrderStatuChangeView, AdminAllProductView,
-                    admincategory, updateproduct, deleteproduct)
+                    admincategory, updateproduct, deleteproduct, index)
 
 urlpatterns = [
+    path('', views.index, name='index'),
     path('store/', views.store, name="store"),
     path('cart/', views.cart, name="cart"),
     path('checkout/', views.checkout, name="checkout"),
@@ -25,7 +26,7 @@ urlpatterns = [
    
 
     path('signup/', SignUpView.as_view(), name='signup'),
-    path('', LoginView.as_view(), name='login'),
+    path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('update_user/', UpdateUserView.as_view(), name='update_user'),
     path('change_password/', UpdatePasswordView.as_view(), name='change_password'),
