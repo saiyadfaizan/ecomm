@@ -1,7 +1,8 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.fields.related import ForeignKey
-
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 # Create your models here.
 ORDER_STATUS = (
     ("Order Initiated", "Order Initiated"),
@@ -21,16 +22,28 @@ class Admin(models.Model):
         return self.name
 
 class Customer(models.Model):
+    
     user = models.OneToOneField(
         User,
         null=True,
-        blank=True,
-        on_delete=models.CASCADE)
+        on_delete=models.CASCADE, verbose_name='user')
     name = models.CharField(max_length=200, null=True)
     email = models.CharField(max_length=200)
 
+
     def __str__(self):
-        return self.name
+        return self.email
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Customer.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.customer.save()
+
+
 
 class Category(models.Model):
    

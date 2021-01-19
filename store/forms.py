@@ -17,7 +17,18 @@ class UserRegisterForm(UserCreationForm):
       fields = ('username', 'first_name', 'last_name',
               'email', 'password1', 'password2')
 
+'''
 
+
+class UserRegisterForm(forms.ModelForm):
+    username = forms.CharField(widget=forms.TextInput())
+    password = forms.CharField(widget=forms.PasswordInput())
+
+    class Meta:
+      model = Customer
+      fields = ['user', 'username', 'name', 'email', 'password']
+
+'''
 class UpdateUserForm(UserChangeForm):
     password = None
 
